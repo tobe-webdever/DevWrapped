@@ -1,0 +1,56 @@
+# .streamlit/config.toml
+#
+# Custom theme for DevWrapped — dark, bold, "Spotify Wrapped"-style.
+# Streamlit auto-loads this file from .streamlit/config.toml relative to
+# wherever `streamlit run` is invoked — no extra flags or imports needed.
+#
+# Color identity is deliberately the SAME palette charts.py already uses
+# (_PALETTE, _THEMES["dark"]) so the Streamlit chrome and the Plotly charts
+# read as one cohesive app, not "a dashboard with some charts dropped in."
+#
+# Schema confirmed against the installed Streamlit version via:
+#   streamlit config show
+
+[theme]
+base = "dark"
+
+# ── Core palette — matches charts.py's dark theme exactly ────────────────────
+primaryColor             = "#00FF88"  # neon green — buttons, sliders, primary accent
+backgroundColor          = "#0D1117"  # same as charts.py paper_bgcolor / plot_bgcolor
+secondaryBackgroundColor = "#161B22"  # widget/card surfaces, a shade lighter than bg
+textColor                = "#E6EDF3"  # same as charts.py font_color
+
+# ── Named accents — used by st.info()/st.success()/links, etc. ───────────────
+blueColor  = "#5BC0EB"   # matches the sky-blue accent in charts.py's _PALETTE
+greenColor = "#00FF88"   # same neon green as primaryColor
+linkColor  = "#5BC0EB"
+
+# ── Fonts ──────────────────────────────────────────────────────────────────────
+# Space Grotesk: geometric, modern, dev-tool feel for body text.
+# Archivo Black: chunky and bold for headings — Wrapped-style reveal headlines.
+# JetBrains Mono: ties code/metrics back to the project's "matrix" aesthetic.
+font        = "Space Grotesk:https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap"
+headingFont = "Archivo Black:https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap"
+codeFont    = "JetBrains Mono:https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap"
+headingFontWeights = 800
+
+# ── Shape ──────────────────────────────────────────────────────────────────────
+# Soft, rounded "card" feel; pill-shaped buttons — Spotify's signature CTA shape.
+baseRadius   = "large"
+buttonRadius = "full"
+
+# ── Borders ────────────────────────────────────────────────────────────────────
+# Subtle, dark-on-dark — just enough definition for cards/inputs without
+# harsh white outlines breaking the dark aesthetic.
+borderColor      = "#30363D"
+showWidgetBorder = true
+
+# ── Chart fallback colors ─────────────────────────────────────────────────────
+# Applies to Plotly/Altair/Vega-Lite charts that DON'T set their own colors.
+# The four custom charts in charts.py already set explicit per-trace colors,
+# so this mainly future-proofs any ad-hoc st.bar_chart()/st.line_chart() call
+# elsewhere in the app, keeping it on-brand without extra styling code.
+chartCategoricalColors = [
+    "#00FF88", "#00C2A8", "#3DDC97", "#5BC0EB",
+    "#9D4EDD", "#FFB627", "#FF6B6B", "#6C757D",
+]

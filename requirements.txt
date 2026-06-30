@@ -1,0 +1,21 @@
+# Pinned to exact versions for reproducible installs.
+# Regenerate with: pip freeze | grep -iE "streamlit|aiohttp|pandas|dotenv|plotly|reportlab|kaleido|requests"
+
+# Core
+streamlit==1.58.0
+python-dotenv==1.2.2
+
+# Fetching (async GitHub API client)
+aiohttp==3.14.1
+requests==2.33.1
+
+# Data & analytics
+pandas==3.0.2
+
+# Charts
+plotly==6.8.0
+kaleido==1.3.0        # static image export for Plotly charts (PDF export only)
+                      # needs a one-time `plotly_get_chrome` after install — see README
+
+# PDF export
+reportlab==4.4.10
