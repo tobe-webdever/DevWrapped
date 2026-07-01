@@ -69,6 +69,25 @@ def _fetch_avatar_image(avatar_url: str, size: int = 100) -> Image | None:
         return None
 
 
+def _sanitize_fig(fig: go.Figure) -> go.Figure:
+    """
+    Convert any pandas Timestamp values in a figure's trace data to ISO
+    strings before passing to kaleido.
+
+    kaleido 1.x uses orjson for serialization, which raises
+    "Type is not JSON serializable: Timestamp" when a figure contains
+    pandas Timestamp objects in its x/y data (e.g. the contribution
+    growth chart's date axis). Converting them to plain ISO strings
+    first makes the figure safe for any kaleido version.
+
+    Works by round-tripping through Plotly's own JSON serializer (which
+    already handles Timestamps correctly) then back to a Figure object,
+    so the figure's visual appearance is completely unchanged.
+    """
+    import json
+    return go.Figure(json.loads(fig.to_json()))
+
+
 def _fig_to_image(fig: go.Figure, width: int = 900, height: int = 520) -> Image:
     """
     Render a Plotly figure to a static PNG (via kaleido) and wrap it as a
@@ -83,6 +102,9 @@ def _fig_to_image(fig: go.Figure, width: int = 900, height: int = 520) -> Image:
             kaleido later instead of silently producing a cryptic
             RuntimeError traceback.
     """
+    # Sanitize before rendering — converts Timestamps to ISO strings so
+    # orjson (used by kaleido 1.x) can serialize the figure without error.
+    fig = _sanitize_fig(fig)
     try:
         png_bytes = fig.to_image(format="png", width=width, height=height, scale=2)
     except RuntimeError as e:
